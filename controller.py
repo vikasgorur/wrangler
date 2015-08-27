@@ -1,3 +1,4 @@
+import logging
 import twython
 import sys
 
@@ -51,6 +52,7 @@ class Conversation:
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
     ebooks = EbooksText(Config)
     peer = TwitterPeer(Config) if len(sys.argv) == 2 and sys.argv[1] == 'twitter' else ConsolePeer()
     conv = Conversation(ebooks, peer)
