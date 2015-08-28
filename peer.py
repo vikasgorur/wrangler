@@ -7,10 +7,10 @@ class ConsolePeer:
         "Send text to the peer"
         print(text)
 
-    def input(self):
+    def listen(self, callback):
         "Get input from the peer"
         print('> ', end='')
-        return input()
+        callback.input(input())
 
     def post(self, text):
         "Post a tweet"
