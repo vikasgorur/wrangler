@@ -24,7 +24,7 @@ class Conversation:
     def _interpret(self, choice):
         if choice == '0' or choice.lower() == 'n':
             return True
-        elif choice.isdigit() and 1 < int(choice) <= self.batch_size:
+        elif choice.isdigit() and 1 <= int(choice) <= self.batch_size:
             self.peer.post(self._tweets[int(choice) - 1])
             self.peer.send('Tweet {0} posted.'.format(int(choice)))
             return False
@@ -52,7 +52,9 @@ class Conversation:
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.INFO,
+                        format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+                        datefmt='%m-%d %H:%M')
     ebooks = EbooksText(Config)
     peer = TwitterPeer(Config) if len(sys.argv) == 2 and sys.argv[1] == 'twitter' else ConsolePeer()
     conv = Conversation(ebooks, peer)
