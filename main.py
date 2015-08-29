@@ -35,7 +35,7 @@ def main():
     logger = logging.getLogger('main')
 
     ebooks = EbooksText(Config)
-    peer = ConsolePeer()
+    peer = TwitterPeer(Config)
     conv = Conversation(ebooks, peer)
 
     if not validate_run_times(Config):
