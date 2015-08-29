@@ -7,7 +7,13 @@ class Config:
     OAUTH_TOKEN = ''
     OAUTH_TOKEN_SECRET = ''
 
-    EBOOKS_COMMAND = 'ebooks gen /home/vikas/shakti_ebooks/model/shakti_shetty.model'
+    # Make sure you have the twitter_ebooks 'model' and 'corpus' directories
+    # inside the current directory.
+    EBOOKS_UPDATE = [
+        'ebooks archive shakti_shetty corpus/shakti_shetty.json',
+        'ebooks consume corpus/shakti_shetty.json'
+    ]
+    EBOOKS_GENERATE = 'ebooks gen model/shakti_shetty.model'
 
     BOT_NAME = 'shakti_ebooks'
     HANDLER_NAME = 'vikasgorur'

@@ -43,6 +43,7 @@ def main():
         sys.exit(1)
 
     while True:
+        ebooks.update()
         next_run = next_run_time(Config)
         logger.info('sleeping until {0}'.format(next_run))
         pause.until(next_run)
