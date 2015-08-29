@@ -37,5 +37,5 @@ When the script opens the browser and takes you to the OAuth screen, make sure t
 Run the daemon with logging to a file:
 
 ```bash
-$ python3 main.py | tee -a my_ebooks.log
+$ python3 main.py 2>&1 | tee -a my_ebooks.log
 ```
