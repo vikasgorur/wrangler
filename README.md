@@ -16,7 +16,7 @@ $ pip3 install -r requirements.txt
 
 ## Setup
 
-Copy the `model` and `corpus` directories created by [https://github.com/mispy/twitter_ebooks](twitter_ebooks) into the current directory. Verify that your bot works by running the following commands:
+Copy the `model` and `corpus` directories created by [twitter_ebooks](https://github.com/mispy/twitter_ebooks) into the current directory. Verify that your bot works by running the following commands:
 
 ```bash
 $ ebooks archive <bot name> corpus/<bot name>.json
