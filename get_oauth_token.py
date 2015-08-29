@@ -16,7 +16,7 @@ def main():
     except Exception as e:
         print('Could not open browser.\nPlease go to {0} and authorize '
               'the application enter the PIN provided by Twitter to complete '
-              'the token generation process')
+              'the token generation process'.format(auth['auth_url']))
 
     print('PIN: ', end='')
     pin = input()
