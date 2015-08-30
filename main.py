@@ -16,7 +16,8 @@ def next_run_time(conf):
     now = datetime.datetime.now()
     (now_h, now_m) = now.hour, now.minute
     times = sorted(conf.RUN_AT)
-    future_times = [(h, m) for (h, m) in times if h >= now_h and m > now_m]
+    future_times = [(h, m) for (h, m) in times if h > now_h or h == now_h and m >= now_m]
+    print(future_times)
     if len(future_times) == 0:
         # nothing in the future today, so pick the first time tomorrow
         (h, m) = times[0]
