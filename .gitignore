@@ -4,3 +4,4 @@ corpus
 model
 .last_updated
 .env
+wrangler.egg-info
