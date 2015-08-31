@@ -1,4 +1,4 @@
-# ebooks_controller
+# Wrangler
 A daemon to control twitter_ebooks bots via DM.
 
 This daemon lets you control your bot via DM. It periodically sends you a list of candidate tweets generated
@@ -9,8 +9,8 @@ by the bot and lets you pick the one you want it to post.
 Make sure you have Python 3 installed.
 
 ```bash
-$ git clone https://github.com/vikasgorur/ebooks_controller
-$ cd ebooks_controller
+$ git clone https://github.com/vikasgorur/wrangler
+$ cd wrangler
 $ pip3 install -r requirements.txt
 ```
 
@@ -37,5 +37,5 @@ When the script opens the browser and takes you to the OAuth screen, make sure t
 Run the daemon with logging to a file:
 
 ```bash
-$ python3 main.py 2>&1 | tee -a my_ebooks.log
+$ python3 wrangler/main.py 2>&1 | tee -a my_ebooks.log
 ```

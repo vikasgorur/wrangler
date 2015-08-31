@@ -3,8 +3,10 @@ import twython
 import sys
 
 from config import Config
-from ebooks import EbooksText
-from peer import ConsolePeer, TwitterPeer
+
+from wrangler.ebooks import EbooksText
+from wrangler.peer import ConsolePeer, TwitterPeer
+
 from twython import TwythonStreamer
 
 class Conversation:

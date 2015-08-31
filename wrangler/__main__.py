@@ -5,9 +5,10 @@ import sys
 import datetime
 
 from config import Config
-from conversation import Conversation
-from ebooks import EbooksText
-from peer import TwitterPeer, ConsolePeer
+
+from wrangler.conversation import Conversation
+from wrangler.ebooks import EbooksText
+from wrangler.peer import TwitterPeer, ConsolePeer
 
 def validate_run_times(conf):
     return all([0 <= h <= 23 and 0 <= m <= 60 for (h, m) in conf.RUN_AT])
