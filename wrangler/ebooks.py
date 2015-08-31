@@ -2,6 +2,7 @@ import datetime
 import logging
 import subprocess
 import os
+import time
 
 import config
 
@@ -33,7 +34,7 @@ class EbooksText:
 
     def _write_timestamp(self):
         with open('.last_updated', mode='w') as f:
-            f.write(str(datetime.datetime.now().timestamp()))
+            f.write(str(time.time()))
 
     def update(self):
         if not self._update_required(): return
