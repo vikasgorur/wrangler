@@ -24,7 +24,7 @@ class EbooksText:
                 self.logger.info('update: don\'t know when last corpus update was, updating')
                 return True
 
-            if last_updated - datetime.datetime.now() > datetime.timedelta(hours=12):
+            if datetime.datetime.now() - last_updated > datetime.timedelta(hours=12):
                 self.logger.info('update: last corpus update was at {0}, updating'.format(last_updated))
                 return True
             else:
