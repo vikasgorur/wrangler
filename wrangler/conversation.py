@@ -1,13 +1,10 @@
 import logging
-import twython
 import sys
 
 from config import Config
 
 from wrangler.ebooks import EbooksText
 from wrangler.peer import ConsolePeer, TwitterPeer
-
-from twython import TwythonStreamer
 
 class Conversation:
     """A conversation starts with the bot messaging the handler with a list
@@ -37,21 +34,16 @@ class Conversation:
             self.peer.send('Unknown command, aborting conversation.')
             return False
 
-    def input(self, choice):
-        if self._interpret(choice):
-            self.talk()
-        else:
-            self.peer.close()
-
     def talk(self):
         "Talk to the handler once by sending tweets and waiting for input"
 
-        self._tweets = self.generate_tweets(self.batch_size)
-        self.peer.send('\n'.join(
-            ['{0}. {1}'.format(i+1, self._tweets[i]) for i in range(self.batch_size)]))
+        while True:
+            self._tweets = self.generate_tweets(self.batch_size)
+            self.peer.send('\n'.join(
+                ['{0}. {1}'.format(i+1, self._tweets[i]) for i in range(self.batch_size)]))
 
-        self.peer.listen(self)
-
+            if not self._interpret(self.peer.input()):
+                break
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO,

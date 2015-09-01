@@ -1,11 +1,13 @@
+coverage==3.7.1
 freezegun==0.3.5
 oauthlib==1.0.3
 pause==0.1.2
 py==1.4.30
 pytest==2.7.2
+pytest-cov==2.1.0
 python-dateutil==2.4.2
 requests==2.7.0
 requests-oauthlib==0.5.0
 six==1.9.0
-twython==3.3.0
+-e git+https://github.com/vikasgorur/tweepy@0e28a070b68d0459137666d463a596b0fcf790ea#egg=tweepy-master
 wheel==0.24.0

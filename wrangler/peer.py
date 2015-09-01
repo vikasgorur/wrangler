@@ -1,51 +1,73 @@
 import logging
+import queue
 
-from twython import Twython, TwythonStreamer
+from collections import namedtuple
+
+import tweepy
+
+# A typed message sent by the stream listener.
+# The type can either be 'error' or 'input'
+Message = namedtuple('Message', ['type', 'value'])
+
+class PeerError(Exception):
+    pass
 
 class ConsolePeer:
     def send(self, text):
         "Send text to the peer"
         print(text)
 
-    def listen(self, callback):
+    def input(self):
         "Get input from the peer"
         print('> ', end='')
-        callback.input(input())
+        try:
+            return input()
+        except KeyboardInterrupt as e:
+            raise PeerError(e)
 
     def post(self, text):
         "Post a tweet"
         print("POST: {0}".format(text))
 
-    def close(self):
-        pass
+class DmListener(tweepy.StreamListener):
+    def __init__(self, handler_name, q):
+        super().__init__()
+        self._handler_name = handler_name
+        self._q = q
 
-class TwitterPeer(TwythonStreamer):
+    def on_direct_message(self, status):
+        if status.direct_message['sender_screen_name'] == self._handler_name:
+            self._q.put(Message(type='input', value=status.direct_message['text']))
+
+    def on_error(self, status_code):
+        if status_code >= 500:
+            self._q.put(Message(type='error', value=None))
+
+class TwitterPeer:
     def __init__(self, conf):
-        super().__init__(conf.CONSUMER_KEY, conf.CONSUMER_SECRET,
-            conf.OAUTH_TOKEN, conf.OAUTH_TOKEN_SECRET)
-        self._client = Twython(conf.CONSUMER_KEY, conf.CONSUMER_SECRET,
-            conf.OAUTH_TOKEN, conf.OAUTH_TOKEN_SECRET)
         self._handler_name = conf.HANDLER_NAME
-        self._callback = None
         self._logger = logging.getLogger('{0}.{1}'.format(__name__, self.__class__.__name__))
 
-    def on_success(self, data):
-        if 'direct_message' in data:
-            dm = data['direct_message']
-            if dm['sender_screen_name'] == self._handler_name:
-                self._logger.info('received DM from {0}: {1}'.format(
-                    self._handler_name, dm['text']))
-                self._callback.input(dm['text'])
+        auth = tweepy.OAuthHandler(conf.CONSUMER_KEY, conf.CONSUMER_SECRET)
+        auth.set_access_token(conf.OAUTH_TOKEN, conf.OAUTH_TOKEN_SECRET)
 
-    def on_error(self, status_code, data):
-        self._logger.error('stream error, status_code = {0}'.format(status_code))
-        self._logger.info('disconnecting')
-        self.disconnect()
+        self._api = tweepy.API(auth)
+        self._q = queue.Queue()
+        self._stream = tweepy.Stream(auth=auth,
+            listener=DmListener(self._handler_name, self._q))
+        self._stream.userstream(async=True)
 
     def send(self, text):
         "Send text via DM"
         self._logger.info('sending DM to {0}: {1}'.format(self._handler_name, text))
-        self._client.send_direct_message(screen_name=self._handler_name, text=text)
+        self._api.send_direct_message(screen_name=self._handler_name, text=text)
+
+    def input(self):
+        (t, val) = self._q.get()
+        if t == 'input':
+            return val
+        elif t == 'error':
+            raise PeerError(val)
 
     def listen(self, callback):
         """Listen to input via DM and invoke callback.input() when something is
@@ -58,9 +80,5 @@ class TwitterPeer(TwythonStreamer):
 
     def post(self, text):
         "Post a tweet"
-        self._client.update_status(status=text)
+        self._api.update_status(text)
         self._logger.info('posting tweet: {0}'.format(text))
-
-    def close(self):
-        self._logger.info('disconnecting')
-        self.disconnect()
