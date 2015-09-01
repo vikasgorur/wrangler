@@ -6,7 +6,7 @@ by the bot and lets you pick the one you want it to post.
 
 ## Install
 
-Make sure you have Python 3 installed.
+Make sure you have Python 3.4 installed.
 
 ```bash
 $ git clone https://github.com/vikasgorur/wrangler
