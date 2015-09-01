@@ -21,7 +21,9 @@ class Conversation:
         return [self.ebooks.generate() for i in range(n)]
 
     def _interpret(self, choice):
-        if choice == '0' or choice.lower() == 'n':
+        # Twitter won't let you send the same message twice within a
+        # short duration. So we tolerate extra junk after the command.
+        if choice.startswith('0') or choice.lower().startswith('n'):
             return True
         elif choice.isdigit() and 1 <= int(choice) <= self.batch_size:
             self.peer.post(self._tweets[int(choice) - 1])
