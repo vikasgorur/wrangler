@@ -69,15 +69,6 @@ class TwitterPeer:
         elif t == 'error':
             raise PeerError(val)
 
-    def listen(self, callback):
-        """Listen to input via DM and invoke callback.input() when something is
-           available"""
-
-        if not self._callback:
-            self._callback = callback
-            self._logger.info('started listening to user stream')
-            self.user()
-
     def post(self, text):
         "Post a tweet"
         self._api.update_status(text)
