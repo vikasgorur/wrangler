@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 
-import twython
 import subprocess
+import tweepy
 
 from config import Config
 
 def main():
     """This is a script to get the oauth tokens for the bot"""
 
-    twitter = twython.Twython(Config.CONSUMER_KEY, Config.CONSUMER_SECRET)
-    auth = twitter.get_authentication_tokens()
+    auth = tweepy.OAuthHandler(Config.CONSUMER_KEY, Config.CONSUMER_SECRET)
+    auth_url = auth.get_authorization_url()
 
     try:
-        subprocess.check_call(['open', auth['auth_url']])
+        subprocess.check_call(['open', auth_url])
     except Exception as e:
         print('Could not open browser.\nPlease go to {0} and authorize '
               'the application enter the PIN provided by Twitter to complete '
@@ -24,12 +24,10 @@ def main():
         print("PIN must be a number")
         exit(1)
 
-    twitter = twython.Twython(Config.CONSUMER_KEY, Config.CONSUMER_SECRET,
-        auth['oauth_token'], auth['oauth_token_secret'])
-    tokens = twitter.get_authorized_tokens(pin)
+    (access_token, access_token_secret) = auth.get_access_token(pin)
 
-    print('OAUTH_TOKEN = \'{0}\''.format(tokens['oauth_token']))
-    print('OAUTH_TOKEN_SECRET = \'{0}\''.format(tokens['oauth_token_secret']))
+    print('OAUTH_TOKEN = \'{0}\''.format(access_token))
+    print('OAUTH_TOKEN_SECRET = \'{0}\''.format(access_token_secret))
 
 if __name__ == '__main__':
     main()
